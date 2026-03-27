@@ -14,6 +14,11 @@ class NotificationService {
     tz.initializeTimeZones();
 
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const darwinSettings = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
     const linuxSettings = LinuxInitializationSettings(
       defaultActionName: 'Open',
     );
@@ -21,6 +26,8 @@ class NotificationService {
     await _plugin.initialize(
       settings: const InitializationSettings(
         android: androidSettings,
+        iOS: darwinSettings,
+        macOS: darwinSettings,
         linux: linuxSettings,
       ),
     );
@@ -75,6 +82,8 @@ class NotificationService {
             importance: Importance.high,
             priority: Priority.high,
           ),
+          iOS: DarwinNotificationDetails(),
+          macOS: DarwinNotificationDetails(),
           linux: LinuxNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
