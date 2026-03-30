@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../screens/change_password_screen.dart';
 import '../services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -290,6 +291,33 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextSpan(
                                 text: _isLogin ? 'Sign Up' : 'Sign In',
                                 style: const TextStyle(
+                                  color: primaryTeal,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ChangePasswordScreen(),
+                          ),
+                        ),
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'Forgot or want to ',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: onSurfaceVariant,
+                            ),
+                            children: const [
+                              TextSpan(
+                                text: 'Change Password',
+                                style: TextStyle(
                                   color: primaryTeal,
                                   fontWeight: FontWeight.w600,
                                 ),
