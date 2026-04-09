@@ -7,10 +7,14 @@ import 'screens/study_screen.dart';
 import 'screens/profile_screen.dart';
 import 'services/ad_service.dart';
 import 'services/notification_service.dart';
+import 'services/premium_service.dart';
+
+final premiumService = PremiumService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.init();
+  await premiumService.load();
   await AdService.init();
   runApp(const TaskEngineApp());
 }

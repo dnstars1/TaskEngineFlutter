@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     ApiService.warmUp();
-    if (AdService.isSupported) {
+    if (AdService.isSupported && !premiumService.isPremium) {
       _topBanner = AdService.createBanner()..load();
       _bottomBanner = AdService.createBanner()..load();
     }

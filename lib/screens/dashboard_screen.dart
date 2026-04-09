@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../models/assignment.dart';
 import '../models/dashboard_summary.dart';
 import '../models/user.dart';
+import '../main.dart';
 import '../services/ad_service.dart';
 import '../services/api_service.dart';
 import '../services/notification_service.dart';
@@ -26,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _fetchData();
-    if (AdService.isSupported) {
+    if (AdService.isSupported && !premiumService.isPremium) {
       _bannerAd = AdService.createBanner()..load();
     }
   }

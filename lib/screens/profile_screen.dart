@@ -8,6 +8,7 @@ import '../services/api_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/bottom_nav.dart';
 import 'legal_screen.dart';
+import 'premium_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -41,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _loadInterstitial() {
-    if (!AdService.isSupported) return;
+    if (!AdService.isSupported || premiumService.isPremium) return;
     InterstitialAd.load(
       adUnitId: AdService.interstitialAdUnitId,
       request: const AdRequest(),
@@ -635,6 +636,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Go Premium button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFC107),
+                  foregroundColor: const Color(0xFF333333),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const PremiumScreen()),
+                  );
+                  setState(() {});
+                },
+                icon: Icon(
+                  premiumService.isPremium
+                      ? Icons.workspace_premium
+                      : Icons.star_outline,
+                ),
+                label: Text(
+                  premiumService.isPremium ? 'Premium Active' : 'Go Premium',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
