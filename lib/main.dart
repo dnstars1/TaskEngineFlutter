@@ -5,11 +5,13 @@ import 'screens/dashboard_screen.dart';
 import 'screens/calendar_screen.dart';
 import 'screens/study_screen.dart';
 import 'screens/profile_screen.dart';
+import 'services/ad_service.dart';
 import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.init();
+  await AdService.init();
   runApp(const TaskEngineApp());
 }
 

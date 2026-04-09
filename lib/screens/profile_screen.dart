@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../main.dart';
 import '../models/user.dart';
+import '../services/ad_service.dart';
 import '../services/api_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/bottom_nav.dart';
@@ -20,6 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool notificationsEnabled = true;
   int notificationLeadTime = 1440;
   bool darkModeEnabled = false;
+  InterstitialAd? _interstitialAd;
 
   static const _leadTimeOptions = [
     (60, '1 hour before'),
@@ -34,6 +37,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _fetchProfile();
+    _loadInterstitial();
+  }
+
+  void _loadInterstitial() {
+    if (!AdService.isSupported) return;
+    InterstitialAd.load(
+      adUnitId: AdService.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => _interstitialAd = ad,
+        onAdFailedToLoad: (_) => _interstitialAd = null,
+      ),
+    );
   }
 
   Future<void> _fetchProfile() async {
@@ -228,7 +244,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _handleDisconnect() async {
     await ApiService.logout();
     if (!mounted) return;
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        },
+        onAdFailedToShowFullScreenContent: (ad, _) {
+          ad.dispose();
+          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        },
+      );
+      _interstitialAd!.show();
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    }
   }
 
   Future<void> _toggleNotifications(bool value) async {

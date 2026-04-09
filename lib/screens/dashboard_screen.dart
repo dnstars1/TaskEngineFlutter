@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../models/assignment.dart';
 import '../models/dashboard_summary.dart';
 import '../models/user.dart';
+import '../services/ad_service.dart';
 import '../services/api_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/bottom_nav.dart';
@@ -18,11 +20,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _loading = true;
   DashboardSummary? _summary;
   List<Assignment> _assignments = [];
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     _fetchData();
+    if (AdService.isSupported) {
+      _bannerAd = AdService.createBanner()..load();
+    }
   }
 
   Future<void> _fetchData() async {
@@ -452,7 +458,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            if (_bannerAd != null)
+              Container(
+                alignment: Alignment.center,
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                margin: const EdgeInsets.symmetric(vertical: 16),
+                child: AdWidget(ad: _bannerAd!),
+              )
+            else
+              const SizedBox(height: 24),
             Text(
               'Upcoming Assignments',
               style: TextStyle(

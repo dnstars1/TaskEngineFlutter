@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../main.dart';
+import '../services/ad_service.dart';
 import '../services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,11 +20,17 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLogin = true;
   bool _obscurePassword = true;
   bool _isLoading = false;
+  BannerAd? _topBanner;
+  BannerAd? _bottomBanner;
 
   @override
   void initState() {
     super.initState();
     ApiService.warmUp();
+    if (AdService.isSupported) {
+      _topBanner = AdService.createBanner()..load();
+      _bottomBanner = AdService.createBanner()..load();
+    }
   }
 
   @override
@@ -30,6 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+    _topBanner?.dispose();
+    _bottomBanner?.dispose();
     super.dispose();
   }
 
@@ -107,6 +117,14 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (_topBanner != null)
+                Container(
+                  alignment: Alignment.center,
+                  width: _topBanner!.size.width.toDouble(),
+                  height: _topBanner!.size.height.toDouble(),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: AdWidget(ad: _topBanner!),
+                ),
               Image.asset(
                 'assets/logo.png',
                 width: 100,
@@ -302,6 +320,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              if (_bottomBanner != null)
+                Container(
+                  alignment: Alignment.center,
+                  width: _bottomBanner!.size.width.toDouble(),
+                  height: _bottomBanner!.size.height.toDouble(),
+                  margin: const EdgeInsets.only(top: 24),
+                  child: AdWidget(ad: _bottomBanner!),
+                ),
             ],
           ),
         ),
