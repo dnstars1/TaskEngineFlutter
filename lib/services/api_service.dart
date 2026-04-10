@@ -161,6 +161,22 @@ class ApiService {
         jsonDecode(res.body) as Map<String, dynamic>);
   }
 
+  // ── Insights ──
+
+  static Future<String?> getStudyAdvice() async {
+    try {
+      final res = await _client.get(
+        Uri.parse('$apiBaseUrl/insights/study-advice'),
+        headers: await _authHeaders(),
+      ).timeout(_timeout);
+      if (res.statusCode != 200) return null;
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      return data['advice'] as String?;
+    } catch (_) {
+      return null;
+    }
+  }
+
   // ── Calendar ──
 
   static Future<Map<String, List<Map<String, dynamic>>>> getCalendarMonth(

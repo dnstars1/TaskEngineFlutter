@@ -22,14 +22,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
   DashboardSummary? _summary;
   List<Assignment> _assignments = [];
   BannerAd? _bannerAd;
+  String? _studyAdvice;
+  bool _adviceLoading = true;
 
   @override
   void initState() {
     super.initState();
     _fetchData();
+    _fetchAdvice();
     if (AdService.isSupported && !premiumService.isPremium) {
       _bannerAd = AdService.createBanner()..load();
     }
+  }
+
+  Future<void> _fetchAdvice() async {
+    final advice = await ApiService.getStudyAdvice();
+    if (!mounted) return;
+    setState(() {
+      _studyAdvice = advice;
+      _adviceLoading = false;
+    });
   }
 
   Future<void> _fetchData() async {
@@ -632,6 +644,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               );
             }),
+            const SizedBox(height: 16),
+            // AI Study Advice card
+            if (_adviceLoading || _studyAdvice != null)
+              Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF167C80).withAlpha(20),
+                      const Color(0xFFFFC107).withAlpha(20),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: const Color(0xFF167C80).withAlpha(50),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.auto_awesome,
+                          color: Color(0xFF167C80),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'AI Study Advice',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    if (_adviceLoading)
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Color(0xFF167C80),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Thinking...',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: onSurfaceVariant,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        _studyAdvice ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: onSurface,
+                          height: 1.4,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
