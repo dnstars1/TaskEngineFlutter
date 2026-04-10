@@ -89,6 +89,23 @@ class ApiService {
     await clearToken();
   }
 
+  static Future<void> changePassword(
+      String email, String currentPassword, String newPassword) async {
+    final res = await _client.post(
+      Uri.parse('$apiBaseUrl/auth/change-password'),
+      headers: _jsonHeaders(),
+      body: jsonEncode({
+        'email': email,
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      }),
+    ).timeout(_timeout);
+    if (res.statusCode != 200) {
+      final body = jsonDecode(res.body) as Map<String, dynamic>;
+      throw ApiException(body['error'] as String? ?? 'Failed to change password');
+    }
+  }
+
   // ── User ──
 
   static Future<User> getProfile() async {

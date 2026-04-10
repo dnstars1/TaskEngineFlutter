@@ -5,6 +5,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/calendar_screen.dart';
 import 'screens/study_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/change_password_screen.dart';
 import 'services/ad_service.dart';
 import 'services/notification_service.dart';
 import 'services/premium_service.dart';
@@ -112,6 +113,7 @@ class _TaskEngineAppState extends State<TaskEngineApp> {
         '/calendar': (_) => const CalendarScreen(),
         '/study': (_) => const StudyScreen(),
         '/profile': (_) => const ProfileScreen(),
+        '/change-password': (_) => const ChangePasswordScreen(),
       },
     );
   }
