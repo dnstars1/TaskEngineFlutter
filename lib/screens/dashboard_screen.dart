@@ -481,6 +481,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
               )
             else
               const SizedBox(height: 24),
+            // AI Study Advice card
+            if (_adviceLoading || _studyAdvice != null)
+              Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF167C80).withAlpha(20),
+                      const Color(0xFFFFC107).withAlpha(20),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: const Color(0xFF167C80).withAlpha(50),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.auto_awesome,
+                          color: Color(0xFF167C80),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'AI Study Advice',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    if (_adviceLoading)
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Color(0xFF167C80),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Thinking...',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: onSurfaceVariant,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        _studyAdvice ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: onSurface,
+                          height: 1.4,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             Text(
               'Upcoming Assignments',
               style: TextStyle(
@@ -644,82 +719,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               );
             }),
-            const SizedBox(height: 16),
-            // AI Study Advice card
-            if (_adviceLoading || _studyAdvice != null)
-              Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF167C80).withAlpha(20),
-                      const Color(0xFFFFC107).withAlpha(20),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: const Color(0xFF167C80).withAlpha(50),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.auto_awesome,
-                          color: Color(0xFF167C80),
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'AI Study Advice',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: onSurface,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    if (_adviceLoading)
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 14,
-                            height: 14,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Color(0xFF167C80),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'Thinking...',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: onSurfaceVariant,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      Text(
-                        _studyAdvice ?? '',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: onSurface,
-                          height: 1.4,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
           ],
         ),
       ),
