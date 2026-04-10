@@ -264,13 +264,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Color statusColor() {
       switch (workloadStatus) {
         case 'light':
-          return primaryTeal;
+          return const Color(0xFF4CAF50); // green
         case 'moderate':
-          return const Color(0xFFFFC107);
+          return const Color(0xFFFFC107); // yellow
         case 'heavy':
-          return const Color(0xFFE53935);
+          return const Color(0xFFE53935); // red
         default:
-          return primaryTeal;
+          return const Color(0xFF4CAF50);
       }
     }
 
